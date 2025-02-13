@@ -9,8 +9,9 @@ export default function Home() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [fromDate1, setFromDate1] = useState("");
+  const [toDate1, setToDate1] = useState("");
   const [messageRate, setMessageRate] = useState<number | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,18 +22,50 @@ export default function Home() {
     setMessageRate(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/sms/get-rate", {
+      const response = await fetch("http://localhost:5000/api/sms/phone-rate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber, from: fromDate, to: toDate }),
+        body: JSON.stringify({ phoneNumber, fromDate: fromDate, toDate: toDate }),
       });
 
       if (!response.ok) throw new Error("Failed to fetch data");
 
       const data = await response.json();
       setMessageRate(data.count);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            console.error("An unknown error occurred", err);
+          }    
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit1 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setMessageRate(null);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/sms/account-rate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fromDate: fromDate1, toDate: toDate1 }),
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch data");
+
+      const data = await response.json();
+      setMessageRate(data.count);
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            console.error("An unknown error occurred", err);
+          }    
     } finally {
       setLoading(false);
     }
@@ -46,7 +79,16 @@ export default function Home() {
           <InputField label="Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
           <InputField label="From Date (YYYY-MM-DD HH:MM:SS)" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
           <InputField label="To Date (YYYY-MM-DD HH:MM:SS)" value={toDate} onChange={(e) => setToDate(e.target.value)} />
-          <Button text="Check SMS Process Rate" />
+          <div style={{ display: 'flex', gap: '23px' }}>
+            <Button text="Check By Phone" />
+        </div>
+        </form>
+        <form onSubmit={handleSubmit1} className="space-y-4">
+          <InputField label="From Date (YYYY-MM-DD HH:MM:SS)" value={fromDate1} onChange={(e) => setFromDate1(e.target.value)} />
+          <InputField label="To Date (YYYY-MM-DD HH:MM:SS)" value={toDate1} onChange={(e) => setToDate1(e.target.value)} />
+          <div style={{ display: 'flex', gap: '23px' }}>
+            <Button text="Check By Account" />
+          </div>
         </form>
 
         {loading && <Loader />}
@@ -55,13 +97,6 @@ export default function Home() {
           <div className="mt-4 text-center">
             <h2 className="text-lg font-semibold">Message Process Rate:</h2>
             <p className="text-blue-600">📊 {messageRate} messages processed per second</p>
-          </div>
-        )}
-
-        {message && (
-          <div className="mt-4 text-center text-green-600">
-            <h2 className="text-lg font-semibold">Message:</h2>
-            <p>{message}</p>
           </div>
         )}
 

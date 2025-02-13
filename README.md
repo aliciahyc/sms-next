@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# sms-next Web Application
+Repo for the sms-next application.
 
-## Getting Started
+## Dependencies
+1. Node.js 
 
-First, run the development server:
+## Environments
+1. Install Node.js https://nodejs.org/en/download
+2. Run command to make sure node.js is installed and configured properly: node --version
 
-```bash
-npm run dev
+## Download source code
+Get source code from Github Repo: https://github.com/aliciahuang22/sms-next
+
+## Download one of the package management tool:
+npm
 # or
-yarn dev
+yarn
+
+## Building Application
+1. Nevigate to project root directory: sms-next
+2. Type command: 
+npm run build
 # or
-pnpm dev
+yarn build
+3. The build dirctory is at: sms-next/.next
+
+## Running Application
+1. Nevigate to project root directory: sms-next
+2. Type command: 
+npm run start
 # or
-bun dev
-```
+yarn start
+ 
+## Test Prerequisite
+1. Backend app SmsControl is running
+2. Send multiple requests to the SmsControl server. 
+i.e. curl -X POST "http://localhost:5000/api/sms/allow-send" -H "Content-Type: application/json" -d '{"phoneNumber": "1234567890"}'
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Testing application on local
+Open a browser, navigate to: http://localhost:3000/
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Test cases:
+1. Click on button "Check SMS Process Rate".
+Expected result: Get process rate for all the phone numbers from all time.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Enter a valid phone number, click on button "Check SMS Process Rate".
+Expected result: Get process rate for this phone numbers from all time.
 
-## Learn More
+3. Enter a valid phone number, From Date and To Date, click on button "Check SMS Process Rate".
+Expected result: Get process rate for this phone numbers from a time span.
 
-To learn more about Next.js, take a look at the following resources:
+4. Enter From Date and To Date withou a phone number, click on button "Check SMS Process Rate".
+Expected result: Get process rate for all phones from a time span.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Enter an invalid phone number, click on button "Check SMS Process Rate".
+Expected result: Get 0 process rate for all phones from a time span.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Enter a valid phone number, and invalid time span, click on button "Check SMS Process Rate".
+Expected result: Get 0 process rate for all phones from a time span.
