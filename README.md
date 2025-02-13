@@ -9,12 +9,15 @@ Repo for the sms-next application.
 2. Run command to make sure node.js is installed and configured properly: node --version
 
 ## Download source code
-Get source code from Github Repo: https://github.com/aliciahuang22/sms-next
+Get source code from Github Repo: https://github.com/aliciahyc/sms-next
 
 ## Download one of the package management tool:
 npm
 # or
 yarn
+
+# Download next.js
+npm install next
 
 ## Building Application
 1. Nevigate to project root directory: sms-next
